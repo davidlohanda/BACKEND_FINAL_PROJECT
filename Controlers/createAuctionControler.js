@@ -43,21 +43,23 @@ module.exports = {
 
     editCreateAuction : (req,res) => {
         if(req.file){
-            console.log(req.file)
-            console.log(req.body.imageBefore.filename)
+            console.log(req.file.path)
+            console.log(req.body.imageBefore)
+
             var data = JSON.parse(req.body.editAuction)
+            data.product_image = req.file.path
             var sql1 = `update table_create_auction set 
                         product_name = '${data.product_name}',
                         product_price = ${data.product_price},
                         add_price = ${data.add_price},
                         product_desc = '${data.product_desc}',
-                        product_image = '${req.file.path}'
+                        product_image = '${data.product_image}'
                         where id = ${req.query.id};
                         `
             db.query(sql1 , (err,result) => {
                 if(err) throw err
                 res.send('Edit Success')
-                // fs.unlinkSync(`../${req.body.imageBefore.filename}`)
+                // fs.unlinkSync(req.body.imageBefore)
 
             })
         }else{
