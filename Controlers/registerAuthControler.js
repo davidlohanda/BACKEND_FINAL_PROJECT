@@ -5,7 +5,6 @@ const cryp = require('crypto')
 
 module.exports = {
     register : (req,res) => {
-    
             var data = req.body
             data.verified = 'false'
             var sql1 = `select * from table_user where username = '${data.username}'`
@@ -18,6 +17,7 @@ module.exports = {
                 data.password = hashPassword
                 var sql2 = `insert into table_user set ?`
                 db.query(sql2 , data , (err,result) => {
+                    
                     if(err) throw err
                     var mailOptions = verify(data.username,data.email)
                     transporter.sendMail(mailOptions , (err,resultEnd) => {
