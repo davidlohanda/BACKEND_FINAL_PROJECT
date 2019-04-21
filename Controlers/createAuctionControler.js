@@ -47,7 +47,17 @@ module.exports = {
             console.log(req.body.imageBefore)
 
             var data = JSON.parse(req.body.editAuction)
-            data.product_image = req.file.path
+            var fileImg = req.file.path
+            var fileImgArr = fileImg.split('')
+            var str=''
+            for(let i = 0 ; i < fileImgArr.length ; i++){
+                if(i == 6){
+                    str += (fileImgArr[i] + '//')
+                }else{
+                    str += fileImgArr[i]
+                }
+            }
+            data.product_image = str
             var sql1 = `update table_create_auction set 
                         product_name = '${data.product_name}',
                         product_price = ${data.product_price},
@@ -59,8 +69,7 @@ module.exports = {
             db.query(sql1 , (err,result) => {
                 if(err) throw err
                 res.send('Edit Success')
-                // fs.unlinkSync(req.body.imageBefore)
-
+                fs.unlinkSync(req.body.imageBefore)
             })
         }else{
             var sql2 = `update table_create_auction set 
@@ -83,8 +92,39 @@ module.exports = {
         db.query(sql , (err,result) => {
             if(err) throw err
             res.send('Delete Success')
-            // fs.unlinkSync(req.query.imageBefore)
+            fs.unlinkSync(req.query.imageBefore)
         })
     }
+    ,
+    
+    getCreateAuctionByCategory : (req,res) => {
+        var sql = `select * from table_create_auction where category=${req.query.category}`
+        db.query(sql , (err,result) => {
+            if(err) throw err
+            res.send(result)
+        })
+    }
+    ,
 
+    getTodayAuction : (req,res) => {
+        var today = new Date()
+        var date = today.getDate()
+        var month = today.getMonth()+1
+        var sql = `select * from table_create_auction where create_time = '${date}/${month}'`
+        db.query(sql , (err,result) => {
+            if(err) throw err
+            res.send(result)
+        })
+    }
+    ,
+
+    getAllUserAuction : (req,res) => {
+        var sql =`select a.id,owner,product_name,product_price,duration,c.category,product_image from table_create_auction a
+        join table_category c on a.category = c.id;`
+
+        db.query(sql , (err,result) => {
+            if(err) throw err
+            res.send(result)
+        })
+    }
 }

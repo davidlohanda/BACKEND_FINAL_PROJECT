@@ -268,3 +268,17 @@
 //         })
 //     })
 // })
+
+
+var a = 'uploadsPRD-1555488417928.jpeg'
+var b = a.split('')
+
+var str=''
+for(let i = 0 ; i < b.length ; i++){
+    if(i == 6){
+        str += (b[i] + '//')
+    }else{
+        str += b[i]
+    }
+}
+console.log(str)

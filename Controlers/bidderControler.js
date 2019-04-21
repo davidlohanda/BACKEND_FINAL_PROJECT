@@ -21,4 +21,48 @@ module.exports = {
             })
         })
     }
+    ,
+
+    getWinner : (req,res) => {
+        var sql = `select * from winner where product_id = ${req.params.id}`
+        db.query(sql , (err,result) => {
+            if(err) throw err
+            res.send(result)
+        })
+    }
+    ,
+
+    addToCart : (req,res) => {
+        var data = {
+            user_id : req.body.user_id,
+            product_id : req.body.product_id,
+            bid_price : req.body.bid_price,
+            product_name : req.body.product_name
+        }
+        var sql = `insert into table_cart set ?`
+        db.query(sql , data ,  (err,result) => {
+            if(err) throw err
+            res.send(result)
+        })
+    }
+    ,
+
+    getCart : (req,res) => {
+        var sql = `select user_id, u.username,product_id,product_name,bid_price from table_cart
+        join table_user u on user_id = u.id
+        where username = '${req.params.username}';`
+        db.query(sql , (err,result) => {
+            if(err) throw err
+            res.send(result)
+        })  
+    },
+
+    getAllCart : (req,res) => {
+        var sql = `select user_id, u.username,product_id,product_name,bid_price from table_cart
+        join table_user u on user_id = u.id;`
+        db.query(sql , (err,result) => {
+            if(err) throw err
+            res.send(result)
+        })
+    }
 }

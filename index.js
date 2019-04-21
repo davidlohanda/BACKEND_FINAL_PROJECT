@@ -17,7 +17,7 @@ app.get('/' , (req,res)=>{
 // UNTUK MEMBUAT FOLDER UPLOAD BISA DIAKSES PUBLIC
 app.use('/uploads',express.static('uploads'))
 //================================================================================
-const {registerAuthRouter,loginRouter,createAuctionRouter,bidderRouter} = require('./Router')
+const {registerAuthRouter,loginRouter,createAuctionRouter,bidderRouter,adminRouter} = require('./Router')
 //Register
 app.use('/auth' , registerAuthRouter)
 //Login
@@ -26,3 +26,5 @@ app.use('/login' , loginRouter)
 app.use('/auction' , createAuctionRouter)
 //Bidder
 app.use('/bidder' , bidderRouter )
+//Admin
+app.use('/admin' , adminRouter)
